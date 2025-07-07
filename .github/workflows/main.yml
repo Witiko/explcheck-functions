@@ -1,0 +1,39 @@
+name: Typeset list of functions
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+  workflow_dispatch:
+  schedule:
+    - cron: '30 4 * * MON'
+env:
+  DEBIAN_FRONTEND: noninteractive
+jobs:
+  typeset-paper:
+    name: Typeset article
+    runs-on: ubuntu-latest
+    container:
+      image: texlive/texlive
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      - name: Typeset list of functions
+        run: latexmk functions.tex
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          path: |
+            functions.pdf
+      - name: Create a prerelease
+        if: github.ref == 'refs/heads/main'
+        uses: marvinpinto/action-automatic-releases@latest
+        with:
+          title: The latest version
+          automatic_release_tag: latest
+          prerelease: true
+          repo_token: ${{ secrets.GITHUB_TOKEN }}
+          files: |
+            functions.pdf

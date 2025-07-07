@@ -1,0 +1,59 @@
+\ExplSyntaxOn
+\file_if_exist:nF
+  { ./functions.generated.tex }
+  {
+    \file_if_exist:nF
+      { ./files.txt }
+      {
+        \sys_shell_now:n
+          {
+            % Find all expl3 files.
+            find~/usr/local/texlive/~-type~f~-iregex~'.*\.\(tex\|cls\|opt\|sty\)$'~>~files.txt
+          }
+      }
+    % Process all expl3 files and create a LaTeX source file listing all functions and where they are defined.
+    \lua_load_module:n
+      { functions }
+  }
+\ExplSyntaxOff
+% Typeset the LaTeX source file.
+\documentclass{article}
+\setcounter{secnumdepth}{0}
+\setcounter{tocdepth}{1}
+\usepackage{fontspec}
+\usepackage[xindy]{imakeidx}
+\makeindex[intoc, name=functions, title=Function index, columns=1]
+\makeindex[intoc, name=files, title=File index, columns=2]
+\indexsetup{othercode=\small}
+\ExplSyntaxOn
+\cs_new:Npn
+  \cs
+  #1
+  {
+    \texttt
+      {
+        \textbackslash
+        \tl_to_str:n
+          { #1 }
+      }
+  }
+\cs_set_eq:NN
+  \filename
+  \tl_to_str:n
+\ExplSyntaxOff
+\usepackage{hyperref}
+\title{(Almost) all expl3 functions}
+\author{Vít Starý Novotný}
+\date{\today}
+\begin{document}
+\maketitle
+\begin{abstract}
+This document uses the expltools bundle to generate a list of (almost) all
+expl3 functions defined in current \TeX{} Live.
+\end{abstract}
+\tableofcontents
+\section{Function list}
+\input functions.generated.tex
+\printindex[functions]
+\printindex[files]
+\end{document}
