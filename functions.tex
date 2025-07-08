@@ -22,8 +22,8 @@
 \setcounter{tocdepth}{1}
 \usepackage{fontspec}
 \usepackage[xindy]{imakeidx}
-\makeindex[intoc, name=functions, title=Function index, columns=1]
-\makeindex[intoc, name=files, title=File index, columns=2]
+\makeindex[intoc, name=functions, title=function index, columns=1]
+\makeindex[intoc, name=files, title=file index, columns=2]
 \indexsetup{othercode=\small}
 \ExplSyntaxOn
 \cs_new:Npn
@@ -41,18 +41,24 @@
   \filename
   \tl_to_str:n
 \ExplSyntaxOff
+\renewcommand{\abstractname}{abstract}
+\renewcommand{\contentsname}{contents}
+\newcommand\lettergroup[1]{%
+  \par\textbf{\MakeLowercase{#1}}\par
+  \nopagebreak
+}
 \usepackage{hyperref}
-\title{(Almost) all expl3 functions}
-\author{Vít Starý Novotný}
-\date{\today}
+\title{(almost) all expl3 functions}
+\author{vít starý novotný}
+\date{july 8, 2025}
 \begin{document}
 \maketitle
 \begin{abstract}
-This document uses the expltools bundle to generate a list of (almost) all
-expl3 functions defined in current \TeX{} Live.
+this document uses the expltools bundle to generate a list of (almost) all
+expl3 functions defined in current tex live
 \end{abstract}
 \tableofcontents
-\section{Function list}
+\section{function list}
 \input functions.generated.tex
 \printindex[functions]
 \printindex[files]
