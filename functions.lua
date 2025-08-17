@@ -20,7 +20,7 @@ for pathname in files:lines() do
   local file = assert(io.open(pathname, "r"))
   local content = assert(file:read("*a"))
   assert(file:close())
-  local options = {fail_fast = false}
+  local options = {fail_fast = false, stop_early_when_confused = false}
   local issues = new_issues(pathname, options)
   local results = {}
   utils.process_with_all_steps(pathname, content, issues, results, options)
