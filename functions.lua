@@ -17,13 +17,9 @@ local files = assert(io.open("files.txt", "r"))
 local function_seen_names, function_seen_pathnames = {}, {}
 local function_names, function_pathnames = {}, {}
 for pathname in files:lines() do
-  local file = assert(io.open(pathname, "r"))
-  local content = assert(file:read("*a"))
-  assert(file:close())
   local options = {fail_fast = false, stop_early_when_confused = false}
-  local issues = new_issues(pathname, options)
-  local results = {}
-  utils.process_with_all_steps(pathname, content, issues, results, options)
+  local state = table.unpack(utils.process_files({pathname}, options))
+  local results = state.results
 
   -- Extract the function definitions from the analysis results.
   local statement_segments = {}
