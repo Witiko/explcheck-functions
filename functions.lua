@@ -22,16 +22,8 @@ for pathname in files:lines() do
   local results = state.results
 
   -- Extract the function definitions from the analysis results.
-  local statement_segments = {}
-  for part_number, part_statements in ipairs(results.statements) do
-    table.insert(statement_segments, part_statements)
-    local part_replacement_texts = results.replacement_texts[part_number]
-    for _, nested_statements in ipairs(part_replacement_texts.statements) do
-      table.insert(statement_segments, nested_statements)
-    end
-  end
-  for _, statements in ipairs(statement_segments) do
-    for _, statement in ipairs(statements) do
+  for _, segment in ipairs(results.segments or {}) do
+    for _, statement in ipairs(segment.statements or {}) do
       if statement.type == FUNCTION_DEFINITION and statement.confidence == DEFINITELY then
         local function_name
         if type(statement.defined_csname) == "string" then
